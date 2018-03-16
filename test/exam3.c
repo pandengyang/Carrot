@@ -10,13 +10,13 @@ struct {
 	pthread_mutex_t mutex;
 	int nput;
 	int nval;
-} shared = {
+} put = {
 	PTHREAD_MUTEX_INITIALIZER
 };
 
 struct {
 	pthread_mutex_t mutex;
-	pthread_cont_t cond;
+	pthread_cond_t cond;
 	int nready;
 } nready = {
 	PTHREAD_MUTEX_INITIALIZER,
@@ -25,7 +25,6 @@ struct {
 
 void *produce (void *arg);
 void *consume (void *arg);
-void consume_wait (int i);
 
 int main (int argc, char **argv)
 {

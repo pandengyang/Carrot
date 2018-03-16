@@ -9,8 +9,11 @@ exam1: exam1.c
 exam2: exam2.c
 	gcc -o exam2 exam2.c -I. -lpthread
 
+exam3: exam3.c
+	gcc -o exam3 exam3.c -I. -lpthread
+
 .PHONY: clean
 
 clean:
 	rm -f *.o
-	rm -f test exam1
+	rm -f test exam1 exam2 exam3
