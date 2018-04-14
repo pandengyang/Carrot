@@ -2,7 +2,9 @@
 #define __QUEUE_H__
 
 #define QUEUE_SIZE 10
-typedef struct thread_pool_job elemtype;
+
+struct threapool_job;
+typedef struct threadpool_job elemtype;
 
 /*
  * mutex 用于同步 front rear count
@@ -22,6 +24,8 @@ struct queue {
 };
 
 int queue_init(struct queue *q);
+int queue_destroy(struct queue *q);
+
 int queue_in(struct queue *q, elemtype *pe);
 int queue_out(struct queue *q, elemtype *pe);
 unsigned int queue_size(struct queue *q);

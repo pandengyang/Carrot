@@ -1,21 +1,22 @@
 CC = gcc
-CPPFLAGS = -I./include -I../include
+CPPFLAGS = -I../include
 CFLAGS = 
 LDFLAGS =
-LIBS= -pthread ../queue/libqueue.a
+LIBS=
+AR = ar
 
 RM = rm -rf
 MKDIR = mkdir -p
 
 DEPS = .dep
 
-TARGET = test 
+TARGET = libqueue.a
 
 SRCS = $(wildcard *.c)
 OBJS = $(patsubst %.c, %.o, $(SRCS))
 
 TARGET:$(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LIBS) $(LDFLAGS)
+	$(AR) -rcs $(TARGET) $(OBJS)
 
 $(OBJS):%.o:%.c
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<

@@ -1,23 +1,22 @@
 #ifndef __THREADPOOL_H__
 #define __THREADPOOL_H__
 
-#include "queue.h"
+struct queue;
 
-#define THREAD_MAX 20
-
-struct threadpool_job {
-	void (*run)(void *arg);
+typedef struct threadpool_job {
+	void *(*run)(void *arg);
 	void *arg;
 } threadpool_job_t;
 
-struct threadpool {
-	struct queue queue;
-	pthread_t threads[THREAD_MAX];
+typedef struct threadpool {
+	struct queue *queue;
+	int thread_max;
+	pthread_t *threads;
 } threadpool_t;
 
-int threadpool_init(struct threadpool *tp);
-int threadpool_destroy(struct threadpool *tp);
+int threadpool_init(threadpool_t *pool, int thread_max);
+int threadpool_destroy(threadpool_t *pool);
 
-int threadpool_in(struct threadpool_job *tp_job);
+int threadpool_in(threadpool_t *pool, threadpool_job_t *job);
 
 #endif
