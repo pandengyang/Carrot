@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -7,6 +8,7 @@
 #define JOB_MAX 10
 
 void *run(void *arg);
+threadpool_t *pool;
 
 char *args[JOB_MAX] = {
 	"1",
@@ -24,8 +26,7 @@ char *args[JOB_MAX] = {
 int main(int argc, char **argv)
 {
 	int i;
-	threadpool_t *pool;
-	threadpool_job_t job;
+	thread_t tid_producer;
 
 	if ((pool = malloc(sizeof(threadpool_t))) == NULL) {
 		return -1;
@@ -35,15 +36,28 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	for (i = 0; i < JOB_MAX; i++) {
+	pthread_create(&producer_tid, NULL, producer, NULL);
+	pthread_join(producer_tid, NULL);
+
+	threadpool_destroy(pool);
+	free(pool);
+}
+
+void *producer(void *arg)
+{
+	int i = 0;
+	threadpool_job_t job;
+
+	while (1) {
 		job.run = run;
 		job.arg = args[i];
 
 		threadpool_in(pool, &job);
-	}
 
-	threadpool_destroy(pool);
-	free(pool);
+		i = ++i % JOB_MAX;
+
+		sleep(1);
+	}
 }
 
 void *run(void *arg)
